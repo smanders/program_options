@@ -8,6 +8,7 @@
 using namespace boost::program_options;
 
 #include <boost/function.hpp>
+#include <boost/smart_ptr/make_shared.hpp>
 using namespace boost;
 
 #include <utility>
@@ -42,12 +43,12 @@ void test_approximation()
 {
     options_description desc;
     desc.add_options()
-        ("foo", new untyped_value())
-        ("fee", new untyped_value())
-        ("baz", new untyped_value())
-        ("all-chroots", new untyped_value())
-        ("all-sessions", new untyped_value())
-        ("all", new untyped_value())
+        ("foo",  boost::make_shared<untyped_value>())
+        ("fee", boost::make_shared<untyped_value>())
+        ("baz", boost::make_shared<untyped_value>())
+        ("all-chroots", boost::make_shared<untyped_value>())
+        ("all-sessions", boost::make_shared<untyped_value>())
+        ("all", boost::make_shared<untyped_value>())
         ;
 
     BOOST_CHECK_EQUAL(desc.find("fo", true).long_name(), "foo");
@@ -74,21 +75,79 @@ void test_approximation()
 //    BOOST_CHECK(*(++a.begin()) == "foo");
 }
 
+<<<<<<< HEAD
+=======
+void test_approximation_with_multiname_options()
+{
+    options_description desc;
+    desc.add_options()
+        ("foo", boost::make_shared<untyped_value>())
+        ("fee", boost::make_shared<untyped_value>())
+        ("fe,baz", boost::make_shared<untyped_value>())
+        ("chroots,all-chroots", boost::make_shared<untyped_value>())
+        ("sessions,all-sessions", boost::make_shared<untyped_value>())
+        ("everything,all", boost::make_shared<untyped_value>())
+        ("qux,fo", boost::make_shared<untyped_value>())
+        ;
+
+    BOOST_CHECK_EQUAL(desc.find("fo", true).long_name(), "qux");
+
+    BOOST_CHECK_EQUAL(desc.find("all", true).long_name(), "everything");
+    BOOST_CHECK_EQUAL(desc.find("all-ch", true).long_name(), "chroots");
+
+    BOOST_CHECK_EQUAL(desc.find("foo", false, false, false).long_names().second, 1u);
+    BOOST_CHECK_EQUAL(desc.find("foo", false, false, false).long_names().first[0], "foo");
+
+    BOOST_CHECK_EQUAL(desc.find("fe", false, false, false).long_names().second, 2u);
+    BOOST_CHECK_EQUAL(desc.find("fe", false, false, false).long_names().first[0], "fe");
+    BOOST_CHECK_EQUAL(desc.find("baz", false, false, false).long_names().first[1], "baz");
+
+    BOOST_CHECK_EQUAL(desc.find("baz", false, false, false).long_names().second, 2u);
+    BOOST_CHECK_EQUAL(desc.find("baz", false, false, false).long_names().first[0], "fizbaz");
+    BOOST_CHECK_EQUAL(desc.find("baz", false, false, false).long_names().first[1], "baz");
+}
+
+void test_long_names_for_option_description()
+{
+    options_description desc;
+    desc.add_options()
+        ("foo", boost::make_shared<untyped_value>())
+        ("fe,baz", boost::make_shared<untyped_value>())
+        ("chroots,all-chroots", boost::make_shared<untyped_value>())
+        ("sessions,all-sessions", boost::make_shared<untyped_value>())
+        ("everything,all", boost::make_shared<untyped_value>())
+        ("qux,fo,q", boost::make_shared<untyped_value>())
+        ;
+
+    BOOST_CHECK_EQUAL(desc.find("foo", false, false, false).long_names().second, 1u);
+    BOOST_CHECK_EQUAL(desc.find("foo", false, false, false).long_names().first[0], "foo");
+
+    BOOST_CHECK_EQUAL(desc.find("fe", false, false, false).long_names().second, 2u);
+    BOOST_CHECK_EQUAL(desc.find("fe", false, false, false).long_names().first[0], "fe");
+    BOOST_CHECK_EQUAL(desc.find("baz", false, false, false).long_names().first[1], "baz");
+
+    BOOST_CHECK_EQUAL(desc.find("qux", false, false, false).long_names().second, 2u);
+    BOOST_CHECK_EQUAL(desc.find("qux", false, false, false).long_names().first[0], "qux");
+    BOOST_CHECK_EQUAL(desc.find("qux", false, false, false).long_names().first[1], "fo");
+}
+
+
+>>>>>>> c0c2230 (Update value_semantic to return a boost shared pointer instead of a raw pointer)
 void test_formatting()
 {
     // Long option descriptions used to crash on MSVC-8.0.
     options_description desc;
     desc.add_options()(
-        "test", new untyped_value(),
+        "test", boost::make_shared<untyped_value>(),
         "foo foo foo foo foo foo foo foo foo foo foo foo foo foo"
         "foo foo foo foo foo foo foo foo foo foo foo foo foo foo"
         "foo foo foo foo foo foo foo foo foo foo foo foo foo foo"
         "foo foo foo foo foo foo foo foo foo foo foo foo foo foo")
-      ("list", new untyped_value(),
+      ("list", boost::make_shared<untyped_value>(),
          "a list:\n      \t"
              "item1, item2, item3, item4, item5, item6, item7, item8, item9, "
              "item10, item11, item12, item13, item14, item15, item16, item17, item18")
-      ("well_formated", new untyped_value(), 
+      ("well_formated", boost::make_shared<untyped_value>(), 
                         "As you can see this is a very well formatted option description.\n"
                         "You can do this for example:\n\n"
                         "Values:\n"
@@ -124,6 +183,24 @@ void test_formatting()
    );
 }
 
+<<<<<<< HEAD
+=======
+void test_multiname_option_formatting()
+{
+    options_description desc;
+    desc.add_options()
+      ("foo,bar", boost::make_shared<untyped_value>(), "a multiple-name option")
+    ;
+
+    stringstream ss;
+    ss << desc;
+    BOOST_CHECK_EQUAL(ss.str(),
+"  --foo arg             a multiple-name option\n"
+   );
+}
+
+
+>>>>>>> c0c2230 (Update value_semantic to return a boost shared pointer instead of a raw pointer)
 void test_formatting_description_length()
 {
     {
@@ -131,9 +208,9 @@ void test_formatting_description_length()
                                  options_description::m_default_line_length,
                                  options_description::m_default_line_length / 2U);
         desc.add_options()
-            ("an-option-that-sets-the-max", new untyped_value(), // > 40 available for desc
+            ("an-option-that-sets-the-max", boost::make_shared<untyped_value>(), // > 40 available for desc
             "this description sits on the same line, but wrapping should still work correctly")
-            ("a-long-option-that-would-leave-very-little-space-for-description", new untyped_value(),
+            ("a-long-option-that-would-leave-very-little-space-for-description", boost::make_shared<untyped_value>(),
             "the description of the long opt, but placed on the next line\n"
             "    \talso ensure that the tabulation works correctly when a"
             " description size has been set");
@@ -159,7 +236,7 @@ void test_formatting_description_length()
                                  options_description::m_default_line_length,
                                  options_description::m_default_line_length - 10U); // leaves < 23 (default option space)
         desc.add_options()
-            ("an-option-that-encroaches-description", new untyped_value(),
+            ("an-option-that-encroaches-description", boost::make_shared<untyped_value>(),
             "this description should always be placed on the next line, and wrapping should continue as normal");
 
         stringstream ss;
@@ -245,6 +322,36 @@ void test_value_name()
    );
 }
 
+<<<<<<< HEAD
+=======
+void test_backwards_compatibility_with_raw_pointer()
+{
+    options_description desc;
+    desc.add_options()
+      ("foo", new untyped_value(), "a raw pointer option")
+    ;
+
+    stringstream ss;
+    ss << desc;
+    BOOST_CHECK_EQUAL(ss.str(),
+"  --foo arg             a raw pointer option\n"
+   );
+}
+
+void test_multiname_key_and_switch_selection()
+{
+    // cases:
+    // foo,f -> f
+    // foo, c -> c
+    // foo,f,g -> g
+    // f,g,h -> h
+    // f,foo throws
+    // foo,bar -> no switch
+    // foo,f,bar -> no switch
+
+    // what about empty strings - consecutive ,'s ?
+}
+>>>>>>> c0c2230 (Update value_semantic to return a boost shared pointer instead of a raw pointer)
 
 int main(int, char* [])
 {
@@ -256,6 +363,7 @@ int main(int, char* [])
     test_word_wrapping();
     test_default_values();
     test_value_name();
+    test_backwards_compatibility_with_raw_pointer();
     return 0;
 }
 
