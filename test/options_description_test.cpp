@@ -8,6 +8,7 @@
 using namespace boost::program_options;
 
 #include <boost/function.hpp>
+#include <boost/smart_ptr/make_shared.hpp>
 using namespace boost;
 
 #include <utility>
@@ -42,12 +43,12 @@ void test_approximation()
 {
     options_description desc;
     desc.add_options()
-        ("foo", new untyped_value())
-        ("fee", new untyped_value())
-        ("baz", new untyped_value())
-        ("all-chroots", new untyped_value())
-        ("all-sessions", new untyped_value())
-        ("all", new untyped_value())
+        ("foo",  boost::make_shared<untyped_value>())
+        ("fee", boost::make_shared<untyped_value>())
+        ("baz", boost::make_shared<untyped_value>())
+        ("all-chroots", boost::make_shared<untyped_value>())
+        ("all-sessions", boost::make_shared<untyped_value>())
+        ("all", boost::make_shared<untyped_value>())
         ;
 
     BOOST_CHECK_EQUAL(desc.find("fo", true).long_name(), "foo");
@@ -79,16 +80,16 @@ void test_formatting()
     // Long option descriptions used to crash on MSVC-8.0.
     options_description desc;
     desc.add_options()(
-        "test", new untyped_value(),
+        "test", boost::make_shared<untyped_value>(),
         "foo foo foo foo foo foo foo foo foo foo foo foo foo foo"
         "foo foo foo foo foo foo foo foo foo foo foo foo foo foo"
         "foo foo foo foo foo foo foo foo foo foo foo foo foo foo"
         "foo foo foo foo foo foo foo foo foo foo foo foo foo foo")
-      ("list", new untyped_value(),
+      ("list", boost::make_shared<untyped_value>(),
          "a list:\n      \t"
              "item1, item2, item3, item4, item5, item6, item7, item8, item9, "
              "item10, item11, item12, item13, item14, item15, item16, item17, item18")
-      ("well_formated", new untyped_value(), 
+      ("well_formated", boost::make_shared<untyped_value>(), 
                         "As you can see this is a very well formatted option description.\n"
                         "You can do this for example:\n\n"
                         "Values:\n"
@@ -131,9 +132,9 @@ void test_formatting_description_length()
                                  options_description::m_default_line_length,
                                  options_description::m_default_line_length / 2U);
         desc.add_options()
-            ("an-option-that-sets-the-max", new untyped_value(), // > 40 available for desc
+            ("an-option-that-sets-the-max", boost::make_shared<untyped_value>(), // > 40 available for desc
             "this description sits on the same line, but wrapping should still work correctly")
-            ("a-long-option-that-would-leave-very-little-space-for-description", new untyped_value(),
+            ("a-long-option-that-would-leave-very-little-space-for-description", boost::make_shared<untyped_value>(),
             "the description of the long opt, but placed on the next line\n"
             "    \talso ensure that the tabulation works correctly when a"
             " description size has been set");
@@ -159,7 +160,7 @@ void test_formatting_description_length()
                                  options_description::m_default_line_length,
                                  options_description::m_default_line_length - 10U); // leaves < 23 (default option space)
         desc.add_options()
-            ("an-option-that-encroaches-description", new untyped_value(),
+            ("an-option-that-encroaches-description", boost::make_shared<untyped_value>(),
             "this description should always be placed on the next line, and wrapping should continue as normal");
 
         stringstream ss;

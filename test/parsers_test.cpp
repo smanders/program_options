@@ -245,8 +245,8 @@ void test_environment()
 {
     options_description desc;
     desc.add_options()
-        ("foo", new untyped_value, "")
-        ("bar", new untyped_value, "")
+        ("foo", boost::shared_ptr<untyped_value>(), "")
+        ("bar", boost::shared_ptr<untyped_value>(), "")
         ;
 
 #if defined(_WIN32) && ! defined(__BORLANDC__)
