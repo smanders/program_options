@@ -50,13 +50,8 @@ namespace boost { namespace program_options {
     }
     
     option_description::
-<<<<<<< HEAD
     option_description(const char* name,
-                       const value_semantic* s)
-=======
-    option_description(const char* names,
                        shared_ptr<const value_semantic> s)
->>>>>>> c0c2230 (Update value_semantic to return a boost shared pointer instead of a raw pointer)
     : m_value_semantic(s)
     {
         this->set_name(name);
@@ -64,13 +59,8 @@ namespace boost { namespace program_options {
                                            
 
     option_description::
-<<<<<<< HEAD
     option_description(const char* name,
-                       const value_semantic* s,
-=======
-    option_description(const char* names,
                        shared_ptr<const value_semantic> s,
->>>>>>> c0c2230 (Update value_semantic to return a boost shared pointer instead of a raw pointer)
                        const char* description)
     : m_description(description), m_value_semantic(s)
     {

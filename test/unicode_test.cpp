@@ -110,13 +110,8 @@ void test_command_line()
         ("foo,f", boost::make_shared<untyped_value>(), "")
         // Explicit qualification is a workaround for vc6
         ("bar,b", po::value<std::string>(), "")
-<<<<<<< HEAD
         ("baz", new untyped_value())
         ("plug*", new untyped_value())
-=======
-        ("baz", boost::make_shared<untyped_value>())
-        ("qux,plug*", boost::make_shared<untyped_value>())
->>>>>>> c0c2230 (Update value_semantic to return a boost shared pointer instead of a raw pointer)
         ;
 
     const wchar_t* cmdline4_[] = { L"--foo=1\u0FF52", L"-f4", L"--bar=11",

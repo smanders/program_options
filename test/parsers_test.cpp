@@ -107,22 +107,12 @@ void test_command_line()
     
     options_description desc;
     desc.add_options()
-<<<<<<< HEAD
         ("foo,f", new untyped_value(), "")
         // Explicit qualification is a workaround for vc6
         ("bar,b", po::value<std::string>(), "")
         ("baz", new untyped_value())
         ("plug*", new untyped_value())
         ;
-=======
-        ("foo,f", boost::make_shared<untyped_value>(), "")
-        ( // Explicit qualification is a workaround for vc6
-            "bar,b", po::value<std::string>(), "")
-        ("car,voiture", boost::make_shared<untyped_value>())
-        ("dog,dawg", boost::make_shared<untyped_value>())
-        ("baz", boost::make_shared<untyped_value>())
-        ("plug*", boost::make_shared<untyped_value>());
->>>>>>> c0c2230 (Update value_semantic to return a boost shared pointer instead of a raw pointer)
     const char* cmdline3_[] = { "--foo=12", "-f4", "--bar=11", "-b4",
                           "--plug3=10"};
     vector<string> cmdline3 = sv(cmdline3_,
@@ -210,22 +200,12 @@ void test_config_file(const char* config_file)
 {
     options_description desc;
     desc.add_options()
-<<<<<<< HEAD
         ("gv1", new untyped_value)
         ("gv2", new untyped_value)
         ("empty_value", new untyped_value)
         ("plug*", new untyped_value)
         ("m1.v1", new untyped_value)
         ("m1.v2", new untyped_value)
-=======
-        ("gv1", boost::shared_ptr<untyped_value>())
-        ("gv2", boost::shared_ptr<untyped_value>())
-        ("empty_value", boost::shared_ptr<untyped_value>())
-        ("plug*", boost::shared_ptr<untyped_value>())
-        ("m1.v1", boost::shared_ptr<untyped_value>())
-        ("m1.v2", boost::shared_ptr<untyped_value>())
-        ("m1.v3,alias3", boost::shared_ptr<untyped_value>())
->>>>>>> c0c2230 (Update value_semantic to return a boost shared pointer instead of a raw pointer)
         ("b", bool_switch())
     ;
 
