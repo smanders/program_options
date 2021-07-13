@@ -11,7 +11,6 @@
 // FIXME: this is only to get multiple_occurrences class
 // should move that to a separate headers.
 #include <boost/program_options/parsers.hpp>
-#include <boost/smart_ptr/make_shared.hpp>
 
 
 #include <boost/lexical_cast.hpp>
@@ -51,7 +50,7 @@ namespace boost { namespace program_options {
     
     option_description::
     option_description(const char* name,
-                       shared_ptr<const value_semantic> s)
+                       const value_semantic* s)
     : m_value_semantic(s)
     {
         this->set_name(name);
@@ -60,7 +59,7 @@ namespace boost { namespace program_options {
 
     option_description::
     option_description(const char* name,
-                       shared_ptr<const value_semantic> s,
+                       const value_semantic* s,
                        const char* description)
     : m_description(description), m_value_semantic(s)
     {
@@ -232,7 +231,7 @@ namespace boost { namespace program_options {
         // no value can be specified on command line.
         // FIXME: does not look exception-safe
         shared_ptr<option_description> d(
-            new option_description(name, boost::make_shared<untyped_value>(true), description));
+            new option_description(name, new untyped_value(true), description));
 
         owner->add(d);
         return *this;
@@ -241,7 +240,7 @@ namespace boost { namespace program_options {
     options_description_easy_init&
     options_description_easy_init::
     operator()(const char* name,
-               shared_ptr<const value_semantic> s)
+               const value_semantic* s)
     {
         shared_ptr<option_description> d(new option_description(name, s));
         owner->add(d);
@@ -251,30 +250,13 @@ namespace boost { namespace program_options {
     options_description_easy_init&
     options_description_easy_init::
     operator()(const char* name,
-               shared_ptr<const value_semantic> s,
+               const value_semantic* s,
                const char* description)
     {
         shared_ptr<option_description> d(new option_description(name, s, description));
 
         owner->add(d);
         return *this;
-    }
-    
-    options_description_easy_init&
-    options_description_easy_init::
-    operator()(const char* name,
-               const value_semantic* s)
-    {
-        return (*this)(name, shared_ptr<const value_semantic>(s));
-    }
-
-    options_description_easy_init&
-    options_description_easy_init::
-    operator()(const char* name,
-               const value_semantic* s,
-               const char* description)
-    {
-        return (*this)(name, shared_ptr<const value_semantic>(s), description);
     }
 
     const unsigned options_description::m_default_line_length = 80;

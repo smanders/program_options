@@ -107,7 +107,7 @@ void test_command_line()
 {
     options_description desc;
     desc.add_options()
-        ("foo,f", boost::make_shared<untyped_value>(), "")
+        ("foo,f", new untyped_value(), "")
         // Explicit qualification is a workaround for vc6
         ("bar,b", po::value<std::string>(), "")
         ("baz", new untyped_value())
